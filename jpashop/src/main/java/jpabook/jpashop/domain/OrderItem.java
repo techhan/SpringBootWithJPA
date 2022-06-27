@@ -46,7 +46,7 @@ public class OrderItem {
         getItem().addStock(count);
 
     }
-    
+
     public int getTotalPrice() {
         return getOrderPrice() * getCount();
     }
