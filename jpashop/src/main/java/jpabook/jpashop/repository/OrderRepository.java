@@ -2,6 +2,7 @@ package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
+import jpabook.jpashop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -26,7 +27,7 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
-    public List<Order> findAll(OrderSearch orderSearch) {
+    public List<Order> findAllByString(OrderSearch orderSearch) {
 
         // 정적 쿼리?
 //        return em.createQuery("select o from Order o join o.member m" +
@@ -38,7 +39,7 @@ public class OrderRepository {
 //                .getResultList();
 
         // 동적 쿼리 1번째 방법
-        String jpql = "select o from Order o join o.member m";
+        String jpql = "select o From Order o join o.member m";
         boolean isFirstCondition =  true;
 
         // 주문 상태 검색
@@ -49,7 +50,7 @@ public class OrderRepository {
             } else {
                 jpql += " and";
             }
-            jpql += " o.status = :status:";
+            jpql += " o.status = :status";
         }
 
         //회원 이름 검색
@@ -102,6 +103,7 @@ public class OrderRepository {
         TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 1000건
         return query.getResultList();
     }
+
 
 
 }
