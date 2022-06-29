@@ -16,17 +16,18 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member newMember = new Member();
-            newMember.setName("Member2");
-            newMember.setId(2L);
-            em.persist(newMember);
 
-            List<Member> result = em.createQuery("select m from Member as m", Member.class)
-                        .getResultList();
-            for (Member member : result) {
-                System.out.println("member.name = " + member.getName());
-            }
-            tx.commit();
+            // 영속
+            Member member = em.find(Member.class, 150L);
+            member.setName("AAAAA");
+
+            // 준영속
+            //em.detach(member);
+
+            //em.clear();
+
+            System.out.println("============================");
+            tx.commit(); // 커밋할 때 아무일도 일어나지 않음.
         } catch (Exception e) {
             tx.rollback();
         } finally {
