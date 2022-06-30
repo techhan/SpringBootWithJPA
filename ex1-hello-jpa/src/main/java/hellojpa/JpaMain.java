@@ -17,14 +17,33 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setId(2L);
-            member.setUsername("B");
-            member.setRoleType(RoleType.USER);
+            Member member1 = new Member();
+            member1.setUsername("A");
 
-            em.persist(member);
 
-            tx.commit(); // 커밋할 때 아무일도 일어나지 않음.
+            Member member2 = new Member();
+            member2.setUsername("B");
+
+            Member member3 = new Member();
+            member3.setUsername("C");
+
+            // DB 시퀀스 : 1    | 필드 id : 1
+            // DB 시퀀스 : 51   | 필드 id : 2
+            // DB 시퀀스 : 51   | 필드 id : 3
+
+            em.persist(member1); // 1, 51
+            em.persist(member2); // 메모리
+            em.persist(member3); // 메모리
+
+
+            for(int i = 4; i <= 48; i++) {
+                Member member = new Member();
+                member.setUsername(i+"");
+                em.persist(member);
+            }
+
+
+            tx.commit();
         } catch (Exception e) {
             tx.rollback();
         } finally {
