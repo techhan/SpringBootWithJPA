@@ -16,32 +16,23 @@ public class JpaMain {
         tx.begin();
 
         try {
+            // 팀 저장
+            Team team = new Team();
+            team.setName("Team A");
+            em.persist(team);
 
-            Member member1 = new Member();
-            member1.setUsername("A");
+            // 회원 저장
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setTeam(team);
+            em.persist(member);
 
+            em.flush();
+            em.clear();
 
-            Member member2 = new Member();
-            member2.setUsername("B");
-
-            Member member3 = new Member();
-            member3.setUsername("C");
-
-            // DB 시퀀스 : 1    | 필드 id : 1
-            // DB 시퀀스 : 51   | 필드 id : 2
-            // DB 시퀀스 : 51   | 필드 id : 3
-
-            em.persist(member1); // 1, 51
-            em.persist(member2); // 메모리
-            em.persist(member3); // 메모리
-
-
-            for(int i = 4; i <= 48; i++) {
-                Member member = new Member();
-                member.setUsername(i+"");
-                em.persist(member);
-            }
-
+            // 조회
+            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = findMember.getTeam();
 
             tx.commit();
         } catch (Exception e) {
