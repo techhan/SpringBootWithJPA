@@ -1,9 +1,8 @@
 package jpabook.jpashop.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member {
@@ -17,6 +16,13 @@ public class Member {
     private String city;
     private String street;
     private String zipcode;
+
+    // 사실 Member에 order List가 있는 설계는 좋은 설계는 아니지만
+    // (Order에 MEMBER_ID란 외래키가 있어서 거기에서 회원에 대한 주문 내역을 뽑을 수 있음)
+    // 예시를 위해 추가한다.
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
+
 
     public Member() {}
 
@@ -58,5 +64,13 @@ public class Member {
 
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }
