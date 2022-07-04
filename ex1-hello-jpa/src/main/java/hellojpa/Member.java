@@ -3,8 +3,7 @@ package hellojpa;
 import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.concurrent.locks.Lock;
+
 
 @Entity // 이 애노테이션이 있어야 JPA가 관리할 객체임을 인식한다.
 //@SequenceGenerator(
@@ -23,7 +22,7 @@ public class Member  extends BaseEntity{
 //    @Column(name = "TEAM_ID")
 //    private Long teamId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
