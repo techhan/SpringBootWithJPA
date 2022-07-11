@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name="ORDERS")
 public class Order {
@@ -16,7 +19,7 @@ public class Order {
 //    @Column(name="MEMBER_ID")
 //    private Long memberId; // 이런 설계는 객체지향스럽지 않고 관계형 DB스러운..
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
@@ -25,10 +28,10 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status; // ORDER, CANCEL
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "DELIVERY_ID")
     private Delivery delivery;
 
