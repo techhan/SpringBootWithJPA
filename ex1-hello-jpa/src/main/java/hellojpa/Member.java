@@ -3,6 +3,7 @@ package hellojpa;
 import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @Entity // 이 애노테이션이 있어야 JPA가 관리할 객체임을 인식한다.
@@ -10,7 +11,7 @@ import javax.persistence.*;
 //        name = "MEMBER_SEQ_GENERATOR",
 //        sequenceName = "MEMBER_SEQ",
 //        initialValue = 1, allocationSize = 50)
-public class Member  extends BaseEntity{
+public class Member  {
 
     @Id @GeneratedValue
     @Column(name = "MEMBER_ID")
@@ -19,16 +20,23 @@ public class Member  extends BaseEntity{
     @Column(name = "USERNAME")
     private String username;
 
-//    @Column(name = "TEAM_ID")
-//    private Long teamId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
+    // 기간
+    @Embedded
+    private Period workPeriod;
 
-//    @OneToOne
-//    @JoinColumn(name = "LOCKER_ID")
-//    private Locker locker;
+    // 주소
+    @Embedded
+    private Address homeAddress;
+
+//    @Embedded
+//    @AttributeOverrides({@AttributeOverride(name = "city",
+//                        column = @Column(name = "work_city")),
+//                        @AttributeOverride(name = "street",
+//                        column = @Column(name = "work_street")),
+//                        @AttributeOverride(name = "zipcode",
+//                        column = @Column(name = "work_zipcode"))})
+//    private Address workAddress;
 
     public Long getId() {
         return id;
@@ -46,21 +54,19 @@ public class Member  extends BaseEntity{
         this.username = username;
     }
 
-    public Team getTeam() {
-        return team;
+    public Period getWorkPeriod() {
+        return workPeriod;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
-        team.getMembers().add(this);
+    public void setWorkPeriod(Period workPeriod) {
+        this.workPeriod = workPeriod;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Member{" +
-//                "id=" + id +
-//                ", username='" + username + '\'' +
-//                ", team=" + team +
-//                '}';
-//    }
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
+    }
 }

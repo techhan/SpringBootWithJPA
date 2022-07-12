@@ -20,23 +20,17 @@ public class JpaMain {
 
         try {
 
-        Child child1 = new Child();
-        Child child2 = new Child();
+            Address address = new Address("city", "street", "100");
 
-        Parent parent = new Parent();
-        parent.addChild(child1);
-        parent.addChild(child2);
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            member1.setHomeAddress(address);
+            em.persist(member1);
 
-        em.persist(parent);
-        em.persist(child1);
-        em.persist(child2);
+            Address newAddress = new Address("NewCity", address.getStreet(), address.getZipcode());
 
-        em.flush();
-        em.clear();
+            member1.setHomeAddress(newAddress);
 
-        Parent findParent = em.find(Parent.class, parent.getId());
-//        findParent.getChildList().remove(0);
-        em.remove(findParent);
 
 
             tx.commit();
