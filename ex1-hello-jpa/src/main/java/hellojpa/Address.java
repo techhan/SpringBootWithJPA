@@ -1,6 +1,7 @@
 package hellojpa;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Embeddable
@@ -54,4 +55,6 @@ public class Address {
     public int hashCode() {
         return Objects.hash(city, street, zipcode);
     }
+
+
 }

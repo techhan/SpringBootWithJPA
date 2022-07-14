@@ -19,17 +19,45 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setHomeAddress(new Address("homeCity","street", "123"));
 
-            Address address = new Address("city", "street", "100");
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("족발");
+            member.getFavoriteFoods().add("라떼");
 
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            member1.setHomeAddress(address);
-            em.persist(member1);
+            member.getAddressHistory().add(new AddressEntity("old_1","street", "123"));
+            member.getAddressHistory().add(new AddressEntity("old_2","street", "123"));
 
-            Address newAddress = new Address("NewCity", address.getStreet(), address.getZipcode());
+            em.persist(member);
 
-            member1.setHomeAddress(newAddress);
+            em.flush();
+            em.clear();
+
+
+            System.out.println("============= START ===============");
+            Member findMember = em.find(Member.class, member.getId());
+
+//            List<Address> addressHistory = findMember.getAddressHistory();
+//            for(Address address : addressHistory) {
+//                System.out.println("address = " + address.getCity());
+//            }
+            Address oldAdd = findMember.getHomeAddress();
+            findMember.setHomeAddress(new Address("newCity", oldAdd.getStreet(),oldAdd.getZipcode() ));
+
+            // 치킨 -> 한식
+            // String이기 때문에 그냥 기존에 있던 치킨을 지우고 한식을 추가해주는 방법 밖에는 없다.
+//            findMember.getFavoriteFoods().remove("치킨");
+//            findMember.getFavoriteFoods().add("한식");
+
+            // 컬렉션 remove()는 기본적으로 매개변수로 주어진 값으로 기존에 있는 값을 찾을때 equals()로 동작한다.
+            // 그래서 remove()로 삭제할 때 삭제하고 싶은 값과 똑같이 넣어주면 된다.
+            // 컬렉션의 경우 일반적인 equals()를 사용하는 경우 같은 값이라도 false를 반환하게 된다.
+            // 그래서 override 된 equals()와 hashCode가 꼭 필수이다.
+            findMember.getAddressHistory().remove(new AddressEntity("old_1","street", "123"));
+            findMember.getAddressHistory().add(new AddressEntity("newCity1","street", "123"));
+
 
 
 
