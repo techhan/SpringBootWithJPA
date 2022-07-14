@@ -13,15 +13,18 @@ public class Member {
 
     @Column(length = 10) // 이런 걸 명시해두면 개발자가 굳이 DB를 뒤져보지 않아도 제약조건을 알 수 있다.
     private String name;
-    private String city;
-    private String street;
-    private String zipcode;
+//    private String city;
+//    private String street;
+//    private String zipcode;
 
     // 사실 Member에 order List가 있는 설계는 좋은 설계는 아니지만
     // (Order에 MEMBER_ID란 외래키가 있어서 거기에서 회원에 대한 주문 내역을 뽑을 수 있음)
     // 예시를 위해 추가한다.
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
+
+    @Embedded
+    private Address address;
 
 
     public Member() {}
@@ -42,35 +45,19 @@ public class Member {
         this.name = name;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getZipcode() {
-        return zipcode;
-    }
-
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
-    }
-
     public List<Order> getOrders() {
         return orders;
     }
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
