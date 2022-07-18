@@ -14,27 +14,30 @@ public class JpaMain {
         tx.begin();
 
         try {
-            for(int i = 0; i < 100; i++) {
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
 
-                Team team = new Team();
-                team.setName("teamA");
-                em.persist(team);
-
-                Member member = new Member();
-                member.setUsername("teamA");
-                member.setAge(10);
-                member.setTeam(team);
-                em.persist(member);
-            }
+            Member member = new Member();
+            member.setUsername("teamA");
+            member.setAge(10);
+            member.setTeam(team);
+                member.setType(MemberType.ADMIN);
+            em.persist(member);
 
             em.flush();
             em.clear();
 
-            String query = "select (select avg(m1.age) from Member m1 ) as avgAge from Member m left join Team t on m.username = t.name";
-            List<Member> result = em.createQuery(query, Member.class)
+            String query = "select m.username, 'HELLO', TRUE from  Member m" +
+                            " where m.type = :userType";
+            List<Object[]> result = em.createQuery(query)
+                    .setParameter("userType", MemberType.ADMIN)
                     .getResultList();
-
-            System.out.println("result.size() = " + result.size());
+            for (Object[] objects : result) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[1] = " + objects[1]);
+                System.out.println("objects[2] = " + objects[2]);
+            }
 
 
 //            Member findMember = result.get(0);
