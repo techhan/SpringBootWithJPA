@@ -16,31 +16,41 @@ public class JpaMain {
 
         try {
 
-            Team team = new Team();
-            em.persist(team);
+            Team teamA = new Team();
+            teamA.setName("팀A");
+            em.persist(teamA);
+
+            Team teamB = new Team();
+            teamB.setName("팀B");
+            em.persist(teamB);
 
             Member member = new Member();
-            member.setUsername("Admin1");
-            member.setTeam(team);
+            member.setUsername("회원1");
+            member.setTeam(teamA);
             em.persist(member);
 
             Member member2 = new Member();
-            member2.setUsername("Admin2");
-            member2.setTeam(team);
+            member2.setUsername("회원2");
+            member2.setTeam(teamA);
             em.persist(member2);
+
+            Member member3 = new Member();
+            member3.setUsername("회원3");
+            member3.setTeam(teamB);
+            em.persist(member3);
 
             em.flush();
             em.clear();
 
 
-            String query = "select m.username from Team t join t.members m";
-            List resultList = em.createQuery(query, Collection.class).getResultList();
+            String query = "select t From Team t join fetch t.members m";
+            List<Team> result= em.createQuery(query, Team.class).getResultList();
 
-            for (Object o : resultList) {
-                System.out.println("o = " + o);
-            }
-
-
+                for (Team team : result) {
+                    System.out.println("team = " + team.getName()
+                            + " | members = " + team.getMembers().size());
+                }
+            
 //            Member findMember = result.get(0);
 //            findMember.setAge(20);
             tx.commit();
