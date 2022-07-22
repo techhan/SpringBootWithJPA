@@ -42,13 +42,22 @@ public class JpaMain {
             em.flush();
             em.clear();
 
+            // fetch join 대상에는 별칭을 주지 않는 것이 좋다.
+            String query = "select t From Team t";
+            List<Team> result= em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(1)
+                    .getResultList();
 
-            String query = "select t From Team t join fetch t.members m";
-            List<Team> result= em.createQuery(query, Team.class).getResultList();
+            System.out.println("result = " + result.size());
+
 
                 for (Team team : result) {
-                    System.out.println("team = " + team.getName()
-                            + " | members = " + team.getMembers().size());
+                    System.out.println("team = " + team.getName() + "| members= "
+                     + team.getMembers().size());
+                    for(Member findMember : team.getMembers()){
+                        System.out.println("-> member = " + findMember);
+                    }
                 }
             
 //            Member findMember = result.get(0);
