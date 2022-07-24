@@ -42,15 +42,23 @@ public class JpaMain {
             em.flush();
             em.clear();
 
+            List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+                    .setParameter("username", "회원1")
+                    .getResultList();
 
-            String query = "select t From Team t join fetch t.members m";
-            List<Team> result= em.createQuery(query, Team.class).getResultList();
+            for (Member member1 : resultList) {
+                System.out.println("member1 = " + member1);
+            }
+//            // fetch join 대상에는 별칭을 주지 않는 것이 좋다.
+//            String query = "select m From Member m where m.team = :team";
+//            List<Member> findMember = em.createQuery(query, Member.class)
+//                    .setParameter("team", teamA)
+//                    .getResultList();
+//
+//            for (Member mem : findMember) {
+//                System.out.println("mem = " + mem);
+//            }
 
-                for (Team team : result) {
-                    System.out.println("team = " + team.getName()
-                            + " | members = " + team.getMembers().size());
-                }
-            
 //            Member findMember = result.get(0);
 //            findMember.setAge(20);
             tx.commit();
